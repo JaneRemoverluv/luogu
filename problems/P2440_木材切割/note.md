@@ -14,7 +14,18 @@
 
 ## 我当时的错误
 
-用大量循环暴力枚举，又尝试用贪心加速，但贪心策略本身效率太低，复杂度不达标导致 TLE。
+二分答案的框架是对的，但 check 函数（`my_count`）里用 `while` 减法循环模拟切割：
+
+```cpp
+while(ans >= length) { cnt++; ans -= length; }
+```
+
+每根木材循环 `len/length` 次，n 根木材、切割长度很小时（如 length=1、len=1e8），单次 check 就要 ~1e13 次运算，必然 TLE。正确写法是一步整除：`cnt += q[i] / length`。
+
+另外两个隐藏问题：
+
+- `n`、`k` 声明为 `long long`，却用 `scanf("%d", ...)` 读入，格式符不匹配（应 `%lld`）
+- `cnt` 是 `int`，总段数最大可达 `1e5 × 1e8 = 1e13`，改成整除写法后会溢出，需 `long long cnt`
 
 ## 正确思路
 
